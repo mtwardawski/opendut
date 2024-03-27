@@ -120,8 +120,6 @@ pub mod homepage {
             .arg("--update")
             .arg(&homepage_source_dir())
             .arg(&out_dir)
-            // .arg("--dest-dir").arg(&out_dir)
-            // .current_dir(doc_dir())
             .run_requiring_success()?;
 
         log::info!("Placed distribution into: {}", out_dir.display());
