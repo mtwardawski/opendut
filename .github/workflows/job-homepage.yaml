@@ -32,6 +32,7 @@ jobs:
       - name: Push to homepage repository
         run: |
           ls -la
+          mkdir -p target/tmp/homepage
           cp --recursive --update target/ci/homepage target/tmp/homepage
           cd target/tmp/homepage
           ls -la
