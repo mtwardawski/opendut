@@ -29,22 +29,34 @@ jobs:
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
-      - name: Push to homepage repository
-        run: |
-          ls -la target/ci/homepage
-          mkdir -p target/tmp/homepage
-          cp --recursive --update target/ci/homepage target/tmp/homepage
-          cd target/tmp/homepage
+#      - name: Push to homepage repository
+#        run: |
+#          ls -la target/ci/homepage
+#          mkdir -p target/tmp/homepage
+#          cp --recursive --update target/ci/homepage target/tmp/homepage
+#          cd target/tmp/homepage
+#          ls -la
+#          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git config --local user.name "github-actions[bot]"
+#          git remote add homepage https://github.com/mtwardawski/mtwardawski.github.io.git
+#          git remote -v
+#          git checkout homepage main
+#          git add -A
+#          git commit -m "Push homepage"
+#          git push -u homepage main
+
+      - name: Download Homepage Artifacts Files
+        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
+        with:
+          pattern: "homepage-${{ github.sha }}"
+      - run: |
+          cd /home/runner/work/opendut/opendut/homepage-${{ github.sha }}
           ls -la
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git remote add homepage https://github.com/mtwardawski/mtwardawski.github.io.git
           git remote -v
-          git checkout homepage main
+#          git checkout homepage main
           git add -A
           git commit -m "Push homepage"
           git push -u homepage main
-          
-
-#          git checkout homepage
-#          then push
