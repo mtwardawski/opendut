@@ -104,12 +104,21 @@ pub mod homepage {
 
     #[tracing::instrument]
     pub fn build() -> crate::Result {
+        util::install_crate(Crate::Mdbook)?;
+        util::install_crate(Crate::MdbookPlantuml)?;
+
         let out_dir = out_dir();
+
+        Command::new("mdbook")
+            .arg("build")
+            .arg("--dest-dir").arg(&out_dir.join("book"))
+            .current_dir(doc_dir())
+            .run_requiring_success()?;
 
         Command::new("cp")
             .arg("--recursive")
             .arg("--update")
-            .arg(&source_dir())
+            .arg(&homepage_source_dir())
             .arg(&out_dir)
             // .arg("--dest-dir").arg(&out_dir)
             // .current_dir(doc_dir())
@@ -120,7 +129,7 @@ pub mod homepage {
         Ok(())
     }
 
-    fn source_dir() -> PathBuf { workspace_dir().join("opendut-homepage/.") }
+    fn homepage_source_dir() -> PathBuf { workspace_dir().join("opendut-homepage/.") }
 
     fn doc_dir() -> PathBuf {
         workspace_dir().join("doc")
