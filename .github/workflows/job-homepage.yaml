@@ -42,4 +42,4 @@ jobs:
           git remote -v
           git add -A
           git commit -m "Push homepage"
-          git push homepage main
+          git push -u homepage main
