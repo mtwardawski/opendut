@@ -25,7 +25,7 @@ jobs:
       - name: Upload homepage artifact
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
         with:
-          name: "homepage-${{ github.sha }}"
+          name: "homepage"
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
@@ -48,10 +48,9 @@ jobs:
       - name: Download Homepage Artifacts Files
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
-          pattern: "homepage-${{ github.sha }}"
-
-      - run: |
-          cd /home/runner/work/opendut/opendut/homepage-${{ github.sha }}
+          pattern: "homepage"
+        run: |
+          cd /home/runner/work/opendut/opendut/homepage
           ls -la
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
