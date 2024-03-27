@@ -43,4 +43,5 @@ jobs:
           git remote -v
           git add -A
           git commit -m "Push homepage"
-          git push -u homepage main
+          ls -la
+          git push homepage main
