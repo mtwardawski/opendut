@@ -44,4 +44,4 @@ jobs:
           git add -A
           git commit -m "Push homepage"
           ls -la
-          git push homepage main
+          git push -u --force homepage main
