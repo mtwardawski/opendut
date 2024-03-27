@@ -35,6 +35,7 @@ jobs:
           pattern: "homepage"
 
       - run: |
+          ls /home/runner/.ssh/
           cd /home/runner/work/opendut/opendut/homepage
           ls -la
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
