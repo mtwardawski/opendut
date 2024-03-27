@@ -32,8 +32,7 @@ jobs:
       - name: Push to homepage repository
         run: |
           ls -la
-#          mkdir tmp/homepage
-          cp --recurive --update target/ci/homepage target/tmp/homepage
+          cp --recursive --update target/ci/homepage target/tmp/homepage
           cd target/tmp/homepage
           ls -la
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
