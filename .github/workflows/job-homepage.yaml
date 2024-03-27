@@ -49,6 +49,7 @@ jobs:
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           pattern: "homepage-${{ github.sha }}"
+
       - run: |
           cd /home/runner/work/opendut/opendut/homepage-${{ github.sha }}
           ls -la
