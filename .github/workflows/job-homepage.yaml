@@ -31,9 +31,10 @@ jobs:
           retention-days: 1
       - name: Push to homepage repository
         run: |
-          mkdir target/tmp/homepage
+          ls -la
+          mkdir tmp/homepage
           cp --recurive target/ci/homepage target/tmp/homepage
-          cd target/tmp/homepage
+          cd tmp/homepage
           ls -la
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
