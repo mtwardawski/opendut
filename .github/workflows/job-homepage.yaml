@@ -29,18 +29,3 @@ jobs:
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
-      - name: Download Homepage Artifacts Files
-        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
-        with:
-          pattern: "homepage"
-        run: |
-          cd /home/runner/work/opendut/opendut/homepage
-          ls -la
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git remote add homepage https://github.com/mtwardawski/mtwardawski.github.io.git
-          git remote -v
-#          git checkout homepage main
-          git add -A
-          git commit -m "Push homepage"
-          git push -u homepage main
