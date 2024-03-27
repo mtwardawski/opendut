@@ -22,6 +22,16 @@ jobs:
       - name: Build homepage files
         run: |
           cargo ci doc homepage build
+      - name: Upload homepage artifact
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
+        with:
+          name: "homepage-${{ github.sha }}"
+          path: "./target/ci/homepage"
+          if-no-files-found: error
+          retention-days: 1
+      - name: Push to homepage repository
+        run: |
+          ls a
           cd target/ci/homepage
           ls -la
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -31,20 +41,4 @@ jobs:
           git add -A
           git commit -m "Push homepage"
           git push homepage main
-      - name: Upload homepage artifact
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
-        with:
-          name: "homepage-${{ github.sha }}"
-          path: "./target/ci/homepage"
-          if-no-files-found: error
-          retention-days: 1
-#      - name: Push to homepage repository
-#        run: |
-#          cd ./target/ci/homepage
-#          ls ./target/ci/homepage
-#          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-#          git config --local user.name "github-actions[bot]"
-#          git add ./target/ci/homepage/*
-#          git commit -m "Push homepage"
-#          git push git@github.com:mtwardawski/mtwardawski.github.io.git
 
