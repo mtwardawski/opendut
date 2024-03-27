@@ -1,0 +1,30 @@
+name: homepage
+on:
+  workflow_call:  # allow this workflow to be called from other workflows
+    inputs:
+      runs-on:
+        default: "['ubuntu-latest']"
+        required: false
+        type: string
+
+jobs:
+  legal:
+    name: Build and package homepage
+    runs-on: ${{ fromJson(inputs.runs-on) }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - name: Rust setup
+        uses: ./.github/actions/rust-setup
+        with:
+          cargo-deny: true
+
+      - name: Build homepage files
+        run: cargo ci doc homepage build
+      - name: Upload licenses artifact
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
+        with:
+          name: "homepage-${{ github.sha }}"
+          path: "./target/ci/homepage"
+          if-no-files-found: error
+          retention-days: 1

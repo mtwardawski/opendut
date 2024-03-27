@@ -18,6 +18,11 @@ enum DocKindCli {
         #[command(subcommand)]
         task: BookCli,
     },
+    /// Build and pack homepage for openDuT
+    Homepage {
+        #[command(subcommand)]
+        task: HomepageCli,
+    },
 }
 #[derive(Debug, clap::Subcommand)]
 enum BookCli {
@@ -27,13 +32,22 @@ enum BookCli {
     Open,
 }
 
+#[derive(Debug, clap::Subcommand)]
+enum HomepageCli {
+    /// Build the homepage
+    Build,
+}
+
 impl DocCli {
     pub fn default_handling(&self) -> crate::Result {
         match &self.kind {
             DocKindCli::Book { task } => match task {
                 BookCli::Build => book::build()?,
                 BookCli::Open => book::open()?,
-            }
+            },
+            DocKindCli::Homepage { task } => match task {
+                HomepageCli::Build => homepage::build()?,
+            },
         };
         Ok(())
     }
@@ -81,5 +95,38 @@ pub mod book {
 
     fn out_dir() -> PathBuf {
         crate::constants::target_dir().join("book")
+    }
+}
+
+pub mod homepage {
+    use crate::core::constants::workspace_dir;
+    use super::*;
+
+    #[tracing::instrument]
+    pub fn build() -> crate::Result {
+        let out_dir = out_dir();
+
+        Command::new("cp")
+            .arg("--recursive")
+            .arg("--update")
+            .arg(&source_dir())
+            .arg(&out_dir)
+            // .arg("--dest-dir").arg(&out_dir)
+            // .current_dir(doc_dir())
+            .run_requiring_success()?;
+
+        log::info!("Placed distribution into: {}", out_dir.display());
+
+        Ok(())
+    }
+
+    fn source_dir() -> PathBuf { workspace_dir().join("opendut-homepage/.") }
+
+    fn doc_dir() -> PathBuf {
+        workspace_dir().join("doc")
+    }
+
+    fn out_dir() -> PathBuf {
+        crate::constants::target_dir().join("homepage")
     }
 }
