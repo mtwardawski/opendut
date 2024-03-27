@@ -33,6 +33,7 @@ jobs:
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           pattern: "homepage"
+
         run: |
           cd /home/runner/work/opendut/opendut/homepage
           ls -la
