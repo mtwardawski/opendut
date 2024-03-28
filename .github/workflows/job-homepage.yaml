@@ -45,8 +45,9 @@ jobs:
           git remote -v
           git branch --list
           git checkout --orphan gh-pages
+          git pull origin gh-pages
           rm -rf *
-          cp --recursive --update /home/runner/homepage-doc /home/runner/work/opendut/opendut/homepage
+          cp --recursive --update /home/runner/homepage-doc /home/runner/work/opendut/opendut
           git add -A
           git commit -m "Push homepage"
           ls -la
