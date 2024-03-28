@@ -35,18 +35,18 @@ jobs:
 
       - name: Prepare branch and push to it
         run: |
-          cd /home/runner/work/opendut/opendut
+          cd /home/runner/work/opendut
           ls -la
-          mkdir -p /home/runner/work/doc
+          mkdir -p /home/runner/homepage-doc
           ls /home/runner/work/doc
-          cp --recursive --update /home/runner/work/opendut/homepage /home/work/runner/doc
+          cp --recursive --update /home/runner/work/opendut/homepage /home/runner/homepage-doc
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git remote -v
           git branch --list
           git checkout --orphan gh-pages
           git rm -rf
-          cp --recursive --update /home/work/runner/doc /home/runner/work/opendut/homepage
+          cp --recursive --update /home/runner/homepage-doc /home/runner/work/opendut/homepage
           git add -A
           git commit -m "Push homepage"
           ls -la
