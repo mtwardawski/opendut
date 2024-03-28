@@ -42,7 +42,6 @@ jobs:
           git remote -v
           git branch --list
           git checkout --orphan gh-pages
-          git rm -rf
           git add -A
           git commit -m "Push homepage"
           ls -la
