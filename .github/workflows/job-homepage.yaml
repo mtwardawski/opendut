@@ -46,7 +46,6 @@ jobs:
           git branch --list
           git fetch --all
           git checkout --orphan gh-pages
-          git pull origin gh-pages
           rm -rf opendut/{*,.*}
           cp --recursive --update /home/runner/homepage-doc /home/runner/work/opendut/opendut
           git add -A
