@@ -14,10 +14,14 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+
       - name: Rust setup
         uses: ./.github/actions/rust-setup
         with:
           cargo-deny: true
+
+      - name: Build homepage files
+        run: cargo ci doc homepage build
 
       - name: Upload homepage artifact
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
@@ -26,20 +30,11 @@ jobs:
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
+
       - name: Download Homepage Artifacts Files
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           pattern: "homepage"
-
-      - name: Git sparse checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
-        with:
-          sparse-checkout: |
-            opendut-homepage
-
-      - name: Build homepage files
-        run: cargo ci doc homepage build
-
 
       - name: Prepare branch and push to it
         run: |
@@ -56,7 +51,7 @@ jobs:
           then
             echo "Branch is already available - nothing to do."
           else
-            // anlegen, alles bis auf .git loeschen
+            echo "Branch not found yet. Checkout new branch and delete everything except .git."
             git checkout -b gh-pages
             find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           fi
