@@ -19,8 +19,6 @@ jobs:
         with:
           cargo-deny: true
 
-      - name: Build homepage files
-        run: cargo ci doc homepage build
       - name: Upload homepage artifact
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
         with:
@@ -33,6 +31,16 @@ jobs:
         with:
           pattern: "homepage"
 
+      - name: Git sparse checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+        with:
+          sparse-checkout: |
+            opendut-homepage
+
+      - name: Build homepage files
+        run: cargo ci doc homepage build
+
+
       - name: Prepare branch and push to it
         run: |
           cd /home/runner/work/opendut/opendut
@@ -42,11 +50,16 @@ jobs:
           cp --recursive --update /home/runner/work/opendut/opendut/homepage /home/runner/homepage-doc
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git remote -v
-          git branch --list
           git fetch --all
-          git checkout --orphan gh-pages
-          rm -rf opendut/{*,.*}
+          git checkout gh-pages
+          if [ $? -eq 0 ]
+          then
+            echo "Branch is already available - nothing to do."
+          else
+            // anlegen, alles bis auf .git loeschen
+            git checkout -b gh-pages
+            find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
+          fi
           cp --recursive --update /home/runner/homepage-doc /home/runner/work/opendut/opendut
           git add -A
           git commit -m "Push homepage"
