@@ -48,7 +48,7 @@ jobs:
           git fetch --all
           git remote -v
           git checkout -b origin gh-pages
-          if [ $? -eq 0 ]
+          if [ $? -eq 128 ]
           then
             echo "Branch is already available - nothing to do."
           else
