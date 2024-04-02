@@ -47,7 +47,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git fetch --all
           git remote -v
-          git checkout -b origin gh-pages
+          git checkout -b gh-pages
           if [ $? -eq 128 ]
           then
             echo "Branch is already available - nothing to do."
