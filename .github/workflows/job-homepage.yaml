@@ -48,6 +48,7 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           repository: mtwardawski/mtwardawski.github.io
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Push homepage to pages repository
         run: |
           git remote -v
