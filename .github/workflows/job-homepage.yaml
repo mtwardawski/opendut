@@ -69,4 +69,6 @@ jobs:
             exit 0
           fi
           git push --force -u origin main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
