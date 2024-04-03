@@ -52,8 +52,8 @@ jobs:
           cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
           echo ".github/*" > .gitignore
           git add -A
-          git commit -m "Push homepage"
-          if [ $? -eq 1 ]
+          git commit --allow-empty -m "Push homepage" 
+          if [ $? -eq 0 ]
           then
             echo "Committed changes."
           else
