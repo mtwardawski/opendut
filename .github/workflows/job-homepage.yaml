@@ -1,5 +1,4 @@
 name: homepage
-permissions: write-all
 on:
   workflow_call:  # allow this workflow to be called from other workflows
     inputs:
@@ -7,7 +6,6 @@ on:
         default: "['ubuntu-latest']"
         required: false
         type: string
-
 jobs:
   legal:
     name: Build and package homepage
@@ -15,15 +13,12 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
-
       - name: Rust setup
         uses: ./.github/actions/rust-setup
         with:
           cargo-deny: true
-
       - name: Build homepage files
         run: cargo ci doc homepage build
-
       - name: Upload homepage artifact
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
         with:
@@ -31,48 +26,26 @@ jobs:
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
-
       - name: Download Homepage Artifacts Files
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           pattern: "homepage"
-
-      - name: Prepare homepage
+      - name: Prepare branch and push to it
         run: |
-          git remote -v
           cd /home/runner/work/opendut/opendut
           mkdir -p /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/homepage /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/.github/actions/rust-setup /home/runner/homepage-doc/rust
-
-      - name: Checkout sources OpenDuT Homepage and commit
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
-        with:
-          repository: mtwardawski/mtwardawski.github.io
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push homepage to pages repository
-        run: |
-          git remote add push-hp https://github-action:${{ secrets.GITHUB_TOKEN }}@github.com/mtwardawski/mtwardawski.github.io
-          git remote -v
-          git config user.email github-actions@github.com
-          git config user.name github-actions
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git fetch --all
+          git remote -v
           git checkout -B gh-pages origin/gh-pages
           find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
           mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
           cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
-          echo ".github/*" > .gitignore
+          echo "/home/runner/work/opendut/opendut/.github/*" > .gitignore
           git add -A
-          git commit --allow-empty -m "Push homepage"
-          if [ $? -eq 0 ]
-          then
-            echo "Committed changes."
-          else
-            echo "Nothing to commit."
-            exit 0
-          fi
-          git push --force -u push-hp gh-pages
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          git commit --allow-empty "Push homepage"
+          git push --force -u origin gh-pages
