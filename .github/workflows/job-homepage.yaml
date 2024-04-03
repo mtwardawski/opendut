@@ -39,19 +39,19 @@ jobs:
       - name: Prepare branch and push to it
         run: |
           cd /home/runner/work/opendut/opendut
-          ls -la
           mkdir -p /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/homepage /home/runner/homepage-doc
-          ls /home/runner/homepage-doc
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git fetch --all
           git remote -v
           git checkout -B gh-pages origin/gh-pages
           find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
-          ls -la /home/runner/homepage-doc
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
+          echo "After copy"
           git add -A
+          echo "After ADD"
           git commit -m "Push homepage"
+          echo "After commit"
           ls -la
-          git push --force -u gh-pages
+          git push --force -u origin gh-pages
