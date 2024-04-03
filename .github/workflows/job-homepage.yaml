@@ -40,7 +40,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git fetch --all
           git remote -v
-          git checkout -B origin gh-pages
+          git checkout -B gh-pages origin/gh-pages
           find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
           mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
