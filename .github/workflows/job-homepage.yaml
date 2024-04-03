@@ -54,7 +54,7 @@ jobs:
           git config user.email github-actions@github.com
           git config user.name github-actions
           git fetch --all
-          git checkout origin/main
+          find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
           mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
           cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
