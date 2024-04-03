@@ -1,7 +1,5 @@
 name: homepage
-permissions:
-  pages: write
-  contents: write
+permissions: write-all
 on:
   workflow_call:  # allow this workflow to be called from other workflows
     inputs:
