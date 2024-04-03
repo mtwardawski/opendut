@@ -53,7 +53,7 @@ jobs:
           echo ".github/*" > .gitignore
           git add -A
           git commit -m "Push homepage"
-          if [ $? -eq 0 ]
+          if [ $? -eq 1 ]
           then
             echo "Committed changes."
           else
