@@ -51,7 +51,7 @@ jobs:
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
           mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
           cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
-          echo "/home/runner/work/opendut/opendut/.github/*" > .gitignore
+          echo ".github/*" > .gitignore
           echo "After copy"
           git add -A
           echo "After ADD"
