@@ -54,6 +54,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Push homepage to pages repository
         run: |
+          git remote add push-hp https://github-action:${{ secrets.GITHUB_TOKEN }}@github.com/mtwardawski/mtwardawski.github.io
           git remote -v
           git config user.email github-actions@github.com
           git config user.name github-actions
@@ -73,7 +74,7 @@ jobs:
             echo "Nothing to commit."
             exit 0
           fi
-          git push --force origin gh-pages
+          git push --force -u push-hp gh-pages
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
