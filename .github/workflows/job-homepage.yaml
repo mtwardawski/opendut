@@ -54,3 +54,10 @@ jobs:
           git add -A
           git commit -m "Push homepage"
           git push --force -u origin gh-pages
+          if [ $? -eq 0 ]
+          then
+            echo "Pushed changes to branch."
+          else
+            echo "Nothing to commit."
+            exit 0
+          fi
