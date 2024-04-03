@@ -47,15 +47,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git fetch --all
           git remote -v
-          git checkout -b gh-pages
-          if [ $? -eq 128 ]
-          then
-            echo "Branch is already available - nothing to do."
-          else
-            echo "Branch not found yet. Checkout new branch and delete everything except .git."
-            git checkout -b gh-pages
-            find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
-          fi
+          git switch -C gh-pages
+          find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           ls -la /home/runner/homepage-doc
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
           git add -A
