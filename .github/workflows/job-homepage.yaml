@@ -53,11 +53,11 @@ jobs:
           echo ".github/*" > .gitignore
           git add -A
           git commit -m "Push homepage"
-          git push --force -u origin gh-pages
           if [ $? -eq 0 ]
           then
-            echo "Pushed changes to branch."
+            echo "Committed changes."
           else
             echo "Nothing to commit."
             exit 0
           fi
+          git push --force -u origin gh-pages
