@@ -40,12 +40,19 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git fetch --all
           git remote -v
-          git checkout -B gh-pages origin/gh-pages
+          git checkout -B origin gh-pages
           find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
           mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
           cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
           echo "/home/runner/work/opendut/opendut/.github/*" > .gitignore
           git add -A
-          git commit --allow-empty "Push homepage"
+          git commit --allow-empty -m "Push homepage"
+          if [ $? -eq 0 ]
+          then
+            echo "Committed changes."
+          else
+            echo "Nothing to commit."
+            exit 0
+          fi
           git push --force -u origin gh-pages
