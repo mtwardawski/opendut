@@ -48,25 +48,24 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           repository: mtwardawski/mtwardawski.github.io
-          path: main
-          run: |
-            git remote -v
-            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git config --local user.name "github-actions[bot]"
-            git fetch --all
-            git checkout origin/main
-            cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
-            mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
-            cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
-            echo ".github/*" > .gitignore
-            git add -A
-            git commit --allow-empty -m "Push homepage"
-            if [ $? -eq 0 ]
-            then
-              echo "Committed changes."
-            else
-              echo "Nothing to commit."
-              exit 0
-            fi
-            git push --force -u origin main
+        run: |
+          git remote -v
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git fetch --all
+          git checkout origin/main
+          cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
+          mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
+          cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
+          echo ".github/*" > .gitignore
+          git add -A
+          git commit --allow-empty -m "Push homepage"
+          if [ $? -eq 0 ]
+          then
+            echo "Committed changes."
+          else
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git push --force -u origin main
 
