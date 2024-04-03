@@ -49,9 +49,10 @@ jobs:
           git checkout -B gh-pages origin/gh-pages
           find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
-          cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut
+          cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
+          echo "/home/runner/work/opendut/opendut/.github/actions/rust-setup/*" > .gitignore
           echo "After copy"
-          git add book/* resources/* CNAME README.md index.html
+          git add -A
           echo "After ADD"
           git commit -m "Push homepage"
           echo "After commit"
