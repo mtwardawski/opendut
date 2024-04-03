@@ -54,4 +54,4 @@ jobs:
           git add -A
           git commit -m "Push homepage"
           ls -la
-          git push -u origin gh-pages
+          git push --force -u origin gh-pages
