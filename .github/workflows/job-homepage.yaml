@@ -47,7 +47,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git fetch --all
           git remote -v
-          git switch -C gh-pages
+          git checkout -B origin/gh-pages
           find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
           ls -la /home/runner/homepage-doc
           cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
