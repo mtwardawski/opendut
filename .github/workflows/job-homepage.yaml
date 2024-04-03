@@ -12,14 +12,8 @@ jobs:
     name: Build and package homepage
     runs-on: ${{ fromJson(inputs.runs-on) }}
     steps:
-      - name: Checkout sources OpenDuT
+      - name: Checkout sources
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
-
-      - name: Checkout sources OpenDuT Homepage
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
-        with:
-          repository: mtwardawski/mtwardawski.github.io
-          path: main
 
       - name: Rust setup
         uses: ./.github/actions/rust-setup
@@ -42,23 +36,37 @@ jobs:
         with:
           pattern: "homepage"
 
-      - name: Prepare branch and push to it
+      - name: Prepare homepage
         run: |
           git remote -v
           cd /home/runner/work/opendut/opendut
           mkdir -p /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/homepage /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/.github/actions/rust-setup /home/runner/homepage-doc/rust
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git fetch --all
-          git checkout -B gh-pages origin/gh-pages
-          find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
-          cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
-          mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
-          cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
-          echo ".github/*" > .gitignore
-          git add -A
-          git commit --allow-empty -m "Push homepage" 
-          if [ $? -eq 0 ]
-          git push --force -u origin gh-pages
+
+      - name: Checkout sources OpenDuT Homepage and commit
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+        with:
+          repository: mtwardawski/mtwardawski.github.io
+          path: main
+          run: |
+            git remote -v
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git fetch --all
+            git checkout origin/main
+            cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
+            mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
+            cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
+            echo ".github/*" > .gitignore
+            git add -A
+            git commit --allow-empty -m "Push homepage"
+            if [ $? -eq 0 ]
+            then
+              echo "Committed changes."
+            else
+              echo "Nothing to commit."
+              exit 0
+            fi
+            git push --force -u origin main
+
