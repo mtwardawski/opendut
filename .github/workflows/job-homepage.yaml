@@ -58,8 +58,6 @@ jobs:
           mkdir -p /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/homepage /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/.github/actions/rust-setup /home/runner/homepage-doc/rust
-          git config user.email github-actions@github.com
-          git config user.name github-actions
           git fetch --all
           git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null || git checkout --orphan $1; }; f'
           git switchorcreateorphan github-pages 
