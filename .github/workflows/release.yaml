@@ -30,6 +30,9 @@ jobs:
 
   homepage:
     uses: ./.github/workflows/job-homepage.yaml
+    permissions:
+      contents: write
+      pages: write
     with:
       runs-on: "${{ vars.OPENDUT_GH_RUNNER_LARGE || '[\"ubuntu-latest\"]' }}"
 
