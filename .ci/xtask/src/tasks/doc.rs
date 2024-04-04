@@ -18,6 +18,11 @@ enum DocKindCli {
         #[command(subcommand)]
         task: BookCli,
     },
+    /// Build and pack homepage for openDuT
+    Homepage {
+        #[command(subcommand)]
+        task: HomepageCli,
+    },
 }
 #[derive(Debug, clap::Subcommand)]
 enum BookCli {
@@ -27,13 +32,22 @@ enum BookCli {
     Open,
 }
 
+#[derive(Debug, clap::Subcommand)]
+enum HomepageCli {
+    /// Build the homepage
+    Build,
+}
+
 impl DocCli {
     pub fn default_handling(&self) -> crate::Result {
         match &self.kind {
             DocKindCli::Book { task } => match task {
                 BookCli::Build => book::build()?,
                 BookCli::Open => book::open()?,
-            }
+            },
+            DocKindCli::Homepage { task } => match task {
+                HomepageCli::Build => homepage::build()?,
+            },
         };
         Ok(())
     }
@@ -59,16 +73,9 @@ pub mod book {
 
     #[tracing::instrument]
     pub fn build() -> crate::Result {
-        util::install_crate(Crate::Mdbook)?;
-        util::install_crate(Crate::MdbookPlantuml)?;
-
         let out_dir = out_dir();
 
-        Command::new("mdbook")
-            .arg("build")
-            .arg("--dest-dir").arg(&out_dir)
-            .current_dir(doc_dir())
-            .run_requiring_success()?;
+        create_md_book_command(&out_dir)?;
 
         log::info!("Placed distribution into: {}", out_dir.display());
 
@@ -83,3 +90,48 @@ pub mod book {
         crate::constants::target_dir().join("book")
     }
 }
+
+pub mod homepage {
+    use super::*;
+
+    #[tracing::instrument]
+    pub fn build() -> crate::Result {
+        let out_dir = out_dir();
+
+        create_md_book_command(&out_dir)?;
+
+        Command::new("cp")
+            .arg("--recursive")
+            .arg("--update")
+            .arg(&homepage_source_dir())
+            .arg(&out_dir)
+            .run_requiring_success()?;
+
+        log::info!("Placed distribution into: {}", out_dir.display());
+
+        Ok(())
+    }
+
+    fn homepage_source_dir() -> PathBuf { crate::constants::workspace_dir().join("opendut-homepage/.") }
+
+    fn out_dir() -> PathBuf {
+        crate::constants::target_dir().join("homepage")
+    }
+}
+
+fn create_md_book_command(out_dir: &PathBuf)  -> crate::Result {
+    util::install_crate(Crate::Mdbook)?;
+    util::install_crate(Crate::MdbookPlantuml)?;
+
+    Command::new("mdbook")
+        .arg("build")
+        .arg("--dest-dir").arg(&out_dir.join("book"))
+        .current_dir(doc_dir())
+        .run_requiring_success()?;
+    Ok(())
+}
+
+fn doc_dir() -> PathBuf {
+        crate::constants::workspace_dir().join("doc")
+    }
+
