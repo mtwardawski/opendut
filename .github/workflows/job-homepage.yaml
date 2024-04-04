@@ -7,6 +7,10 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: write
+  pages: write
+
 jobs:
   check_documentation_changed:
     name: Check if documentation has changed and a new deploy is needed
@@ -27,9 +31,6 @@ jobs:
     name: Build and deploy homepage (Push on Main, Development or when tagged)
     needs: check_documentation_changed
     runs-on: ${{ fromJson(inputs.runs-on) }}
-    permissions:
-      contents: write
-      pages: write
     if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' || github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag' }}
     steps:
       - name: Checkout sources
