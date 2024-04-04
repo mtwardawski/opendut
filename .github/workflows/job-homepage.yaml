@@ -7,11 +7,6 @@ on:
         required: false
         type: string
 
-permissions:
-  contents: write
-  pages: write
-  packages: read
-
 jobs:
   check_documentation_changed:
     name: Check if documentation has changed and a new deploy is needed
@@ -28,10 +23,14 @@ jobs:
               - 'doc/**'
               - 'opendut-homepage/**'
 
-  legal: # Triggered if pushed on Main, Development or when tagged, also triggered if something changed in doc folder or in opendut-homapge folder
+  homepage_build_deploy: # Triggered if pushed on Main, Development or when tagged, also triggered if something changed in doc folder or in opendut-homapge folder
     name: Build and deploy homepage (Push on Main, Development or when tagged)
     needs: check_documentation_changed
     runs-on: ${{ fromJson(inputs.runs-on) }}
+    permissions:
+      contents: write
+      pages: write
+      packages: read
     if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' || github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag' }}
     steps:
       - name: Checkout sources
