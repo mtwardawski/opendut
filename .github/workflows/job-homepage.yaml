@@ -6,6 +6,12 @@ on:
         default: "['ubuntu-latest']"
         required: false
         type: string
+
+permissions:
+  contents: write
+  pages: write
+  packages: read
+
 jobs:
   check_documentation_changed:
     name: Check if documentation has changed and a new deploy is needed
