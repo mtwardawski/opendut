@@ -47,27 +47,22 @@ jobs:
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
-#      - name: Download homepage artifacts
-#        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
-#        with:
-#          pattern: "homepage"
       - name: Prepare branch and commit
 #        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
           cd /home/runner/work/opendut/opendut
           ls -la /home/runner/work/opendut/opendut/target/ci/homepage
           ls -la /home/runner/work/opendut/opendut/target/ci
-          mkdir -p /home/runner/homepage-doc
-          cp --recursive --update /home/runner/work/opendut/opendut/target/ci/homepage /home/runner/homepage-doc
-          cp --recursive --update /home/runner/work/opendut/opendut/.github/actions/rust-setup /home/runner/homepage-doc/rust
           git fetch --all
           git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null || git checkout --orphan $1; }; f'
           git switchorcreateorphan github-pages 
-          find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?' -delete
-          cp --recursive --update /home/runner/homepage-doc/homepage/. /home/runner/work/opendut/opendut
-          mkdir -p /home/runner/work/opendut/opendut/.github/actions/rust-setup/
-          cp --recursive --update /home/runner/homepage-doc/rust/. /home/runner/work/opendut/opendut/.github/actions/rust-setup
-          echo ".github/" > .gitignore
+          find ./ -mindepth 1 ! -regex '^./.git\(/.*\)?|target\(/.*\)?|.github\(/.*\)?' -delete
+          ls -la /home/runner/work/opendut/opendut/
+          ls -la /home/runner/work/opendut/opendut/target/ci
+          ls -la /home/runner/work/opendut/opendut/target/ci/homepage
+          cp --recursive --update /home/runner/work/opendut/opendut/target/ci/homepage /home/runner/work/opendut/opendut/
+          echo ".github/" >> .gitignore
+          echo "target/" >> .gitignore
           git rm -rf --cached .
           git add -A
           git config alias.commitordonothing '!f() { git commit -m "Push homepage" 2>/dev/null || echo "Nothing to commit."; }; f'
