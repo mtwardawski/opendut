@@ -31,7 +31,6 @@ jobs:
     name: Build and deploy homepage (Push on Main, Development or when tagged)
     needs: check_documentation_changed
     runs-on: ${{ fromJson(inputs.runs-on) }}
-    if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'development' || github.ref_type == 'tag') }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
@@ -52,7 +51,8 @@ jobs:
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           pattern: "homepage"
-      - name: Prepare branch and push to it
+      - name: Prepare branch and commit
+        if: $ {{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
           cd /home/runner/work/opendut/opendut
           mkdir -p /home/runner/homepage-doc
