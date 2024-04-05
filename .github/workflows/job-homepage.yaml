@@ -31,7 +31,7 @@ jobs:
     name: Build and deploy homepage (Push on Main, Development or when tagged)
     needs: check_documentation_changed
     runs-on: ${{ fromJson(inputs.runs-on) }}
-    if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' || github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag' }}
+    if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'development' || github.ref_type == 'tag') }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
