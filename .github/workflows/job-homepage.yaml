@@ -60,9 +60,9 @@ jobs:
           ls -la /home/runner/work/opendut/opendut/
           ls -la /home/runner/work/opendut/opendut/.github/actions
           ls -la /home/runner/work/opendut/opendut/.github/actions/rust-setup/
-          ls -la /home/runner/work/opendut/opendut/target/ci
           ls -la /home/runner/work/opendut/opendut/target/ci/homepage
-          cp --recursive --update /home/runner/work/opendut/opendut/target/ci/homepage /home/runner/work/opendut/opendut/
+          cp --recursive --update /home/runner/work/opendut/opendut/target/ci/homepage/. /home/runner/work/opendut/opendut/
+          ls -la /home/runner/work/opendut/opendut/
           echo "target/" >> .gitignore
           git rm -rf --cached .
           git add -A
