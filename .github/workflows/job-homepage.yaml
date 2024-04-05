@@ -54,7 +54,7 @@ jobs:
           git fetch --all
           git config user.email github-actions@github.com
           git config user.name github-actions
-          git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null && echo "SWITCHED" || git checkout --orphan $1 && git commit -m "Initial Commit" && echo "ORPHANED"; }; f'
+          git config alias.switchorcreateorphan '!f() { (git switch $1 2>/dev/null && echo "SWITCHED") || (git checkout --orphan $1 && git commit -m "Initial Commit" && echo "ORPHANED"); }; f'
           git switchorcreateorphan github-pages 
           find ./ -mindepth 1 ! -regex '\(^./.git\(/.*\)?\)\|\(^./target\(/.*\)?\)\|\(^./.github\(/.*\)?\)' -delete
           find ./.github/actions -mindepth 1 ! -regex '^./.github/actions/rust-setup\(/.*\)?' -delete 
