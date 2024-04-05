@@ -52,10 +52,10 @@ jobs:
         run: |
           cd /home/runner/work/opendut/opendut
           git fetch --all
-          git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null && git pull && echo "SWITCHED" || git checkout --orphan $1 && echo "ORPHAN"; }; f'
+          git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null && git pull && echo "SWITCHED" || 
+            git checkout --orphan $1 && echo "ORPHAN" && find ./ -mindepth 1 ! -regex '\(^./.git\(/.*\)?\)\|\(^./target\(/.*\)?\)\|\(^./.github\(/.*\)?\)' -delete
+            && find ./.github/actions -mindepth 1 ! -regex '^./.github/actions/rust-setup\(/.*\)?' -delete ; }; f'
           git switchorcreateorphan github-pages 
-          find ./ -mindepth 1 ! -regex '\(^./.git\(/.*\)?\)\|\(^./target\(/.*\)?\)\|\(^./.github\(/.*\)?\)' -delete
-          find ./.github/actions -mindepth 1 ! -regex '^./.github/actions/rust-setup\(/.*\)?' -delete 
           ls -la /home/runner/work/opendut/opendut/
           ls -la /home/runner/work/opendut/opendut/.github/actions
           ls -la /home/runner/work/opendut/opendut/.github/actions/rust-setup/
