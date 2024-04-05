@@ -52,6 +52,8 @@ jobs:
         run: |
           cd /home/runner/work/opendut/opendut
           git fetch --all
+          git config user.email github-actions@github.com
+          git config user.name github-actions
           git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null && git pull && echo "SWITCHED" || git checkout --orphan $1 && git commit && echo "ORPHANED"; }; f'
           git switchorcreateorphan github-pages 
           find ./ -mindepth 1 ! -regex '\(^./.git\(/.*\)?\)\|\(^./target\(/.*\)?\)\|\(^./.github\(/.*\)?\)' -delete
