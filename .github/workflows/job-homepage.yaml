@@ -63,7 +63,6 @@ jobs:
           cp --recursive --update /home/runner/work/opendut/opendut/target/ci/homepage/. /home/runner/work/opendut/opendut/
           ls -la /home/runner/work/opendut/opendut/
           echo "target/" >> .gitignore
-          git rm -rf --cached .
           git add -A
           ls -la /home/runner/work/opendut/opendut/
           git config alias.commitordonothing '!f() { git commit -m "Push homepage" 2>/dev/null || echo "Nothing to commit."; }; f'
