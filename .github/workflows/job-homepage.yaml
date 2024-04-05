@@ -48,7 +48,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
       - name: Prepare branch and commit
-        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
+#        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
           cd /home/runner/work/opendut/opendut
           mkdir -p /home/runner/homepage-doc
