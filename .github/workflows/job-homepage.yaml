@@ -70,4 +70,4 @@ jobs:
           ls -la /home/runner/work/opendut/opendut/
           git config alias.commitordonothing '!f() { git commit --amend -am "Push homepage" 2>/dev/null || echo "Nothing to commit."; }; f'
           git commitordonothing
-          git push -u origin github-pages
+          git push --force-with-lease -u origin github-pages
