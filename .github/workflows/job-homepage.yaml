@@ -58,7 +58,7 @@ jobs:
           ls -la /home/runner/work/opendut/opendut/target/ci/homepage
           ls -la /home/runner/work/opendut/opendut/target/ci
           mkdir -p /home/runner/homepage-doc
-          cp --recursive --update /home/runner/work/opendut/opendut/homepage /home/runner/homepage-doc
+          cp --recursive --update /home/runner/work/opendut/opendut/target/ci/homepage /home/runner/homepage-doc
           cp --recursive --update /home/runner/work/opendut/opendut/.github/actions/rust-setup /home/runner/homepage-doc/rust
           git fetch --all
           git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null || git checkout --orphan $1; }; f'
