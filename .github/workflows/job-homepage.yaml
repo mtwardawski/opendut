@@ -54,6 +54,7 @@ jobs:
           git fetch --all
           git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null || git checkout --orphan $1; }; f'
           git switchorcreateorphan github-pages 
+          git pull origin github-pages
           find ./ -mindepth 1 ! -regex '\(^./.git\(/.*\)?\)\|\(^./target\(/.*\)?\)\|\(^./.github\(/.*\)?\)' -delete
           ls -la /home/runner/work/opendut/opendut/
           find ./.github/actions -mindepth 1 ! -regex '^./.github/actions/rust-setup\(/.*\)?' -delete 
