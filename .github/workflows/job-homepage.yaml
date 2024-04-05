@@ -51,6 +51,8 @@ jobs:
 #        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
           cd /home/runner/work/opendut/opendut
+          ls -la /home/runner/work/opendut/opendut/
+          ls -la /home/runner/work/opendut/opendut/.github/actions/rust-setup
           git fetch --all
           git config alias.switchorcreateorphan '!f() { git switch $1 2>/dev/null || git checkout --orphan $1; }; f'
           git switchorcreateorphan github-pages 
