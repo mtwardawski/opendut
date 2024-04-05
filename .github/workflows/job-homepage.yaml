@@ -47,10 +47,6 @@ jobs:
           path: "./target/ci/homepage"
           if-no-files-found: error
           retention-days: 1
-      - name: Download homepage artifacts
-        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
-        with:
-          pattern: "homepage"
       - name: Prepare branch and commit
         if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
