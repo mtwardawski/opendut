@@ -59,10 +59,11 @@ jobs:
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           pattern: "homepage"
+
       - name: Prepare branch and commit
 #        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
-          cd /home/runner/work/opendut/opendut
+          cd /home/runner/work/opendut/opendut/homepage
           git config alias.switchorcreateorphan '!f() { (git switch $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && git commit -m "Initial Commit" && echo "ORPHANED"); }; f'
           git fetch --all
           git config user.email github-actions@github.com
