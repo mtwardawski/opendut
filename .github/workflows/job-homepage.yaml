@@ -71,7 +71,7 @@ jobs:
           git config alias.switchorcreateorphan '!f() { (git checkout $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && echo "ORPHANED"); }; f'
           git switchorcreateorphan github-pages
           ls -la /home/runner/work/opendut/opendut/
-          rsync -v --recursive --checksum --whole-file --delete-before /home/runner/work/opendut/opendut/homepage/ /home/runner/work/opendut/opendut
+          rsync -v --recursive --checksum --whole-file /home/runner/work/opendut/opendut/homepage/ /home/runner/work/opendut/opendut
           rm -rf homepage/
           ls -la /home/runner/work/opendut/opendut/
           git add -A
