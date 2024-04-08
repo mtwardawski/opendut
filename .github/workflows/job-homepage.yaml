@@ -49,7 +49,7 @@ jobs:
           retention-days: 1
 
   homepage_build_deploy: # Triggered if pushed on Main, Development or when tagged, also triggered if something changed in doc folder or in opendut-homapge folder
-    name: Build and deploy homepage (Push on Main, Development or when tagged)
+    name: Release homepage (Changes in doc/opendut-homepage folder and Push on Main or Development or tagged)
     needs: [check_documentation_changed, build_homepage]
     runs-on: ${{ fromJson(inputs.runs-on) }}
     steps:
@@ -65,7 +65,8 @@ jobs:
 #        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
           cd /home/runner/work/opendut/opendut/homepage
-          git config alias.switchorcreateorphan '!f() { (git switch $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && git commit -m "Initial Commit" && echo "ORPHANED"); }; f'
+          ls -la /home/runner/work/opendut/opendut/homepage
+          git config alias.switchorcreateorphan '!f() { (git switch $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && echo "ORPHANED"); }; f'
           git fetch --all
           git config user.email github-actions@github.com
           git config user.name github-actions
