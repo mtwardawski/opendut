@@ -27,7 +27,7 @@ jobs:
               - 'doc/**'
               - 'opendut-homepage/**'
 
-  build_hompage:
+  build_homepage:
     name: Build the homepage and upload artifact
     runs-on: ${{ fromJson(inputs.runs-on) }}
     needs: check_documentation_changed
