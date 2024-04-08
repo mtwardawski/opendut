@@ -64,7 +64,7 @@ jobs:
       - name: Prepare branch and commit
 #        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
         run: |
-          cd /home/runner/work/opendut/opendut/homepage
+          cd /home/runner/work/opendut/opendut
           git fetch --all
           git config user.email github-actions@github.com
           git config user.name github-actions
@@ -74,9 +74,11 @@ jobs:
           cp --recursive --update /home/runner/work/opendut/opendut/homepage/. /home/runner/work/opendut/opendut/
           rm -rf homepage/
           ls -la /home/runner/work/opendut/opendut/
+          git rm -rf --cached .
           git add -A
           git status
           ls -la /home/runner/work/opendut/opendut/
+          git commit "Push homepage"
           git config alias.commitordonothing '!f() { git commit "Push homepage" 2>/dev/null || echo "No files to commit."; }; f'
           git commitordonothing
           git push -u origin github-pages
