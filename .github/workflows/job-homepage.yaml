@@ -74,7 +74,6 @@ jobs:
           cp --recursive --update /home/runner/work/opendut/opendut/homepage/. /home/runner/work/opendut/opendut/
           rm -rf homepage/
           ls -la /home/runner/work/opendut/opendut/
-          git rm -rf --cached .
           git add -A
           git status
           ls -la /home/runner/work/opendut/opendut/
