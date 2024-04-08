@@ -1,7 +1,5 @@
 # Getting Started
 
-GETTING STARTED!!!!!
-
 ## Development Setup
 Install the Rust toolchain: [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
 
