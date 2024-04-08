@@ -70,10 +70,8 @@ jobs:
           git config user.name github-actions
           git config alias.switchorcreateorphan '!f() { (git checkout $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && echo "ORPHANED"); }; f'
           git switchorcreateorphan github-pages
-#          find ./ -mindepth 1 ! -regex '\(^./.git\(/.*\)?\)\|\(^./homepage\(/.*\)?\)' -delete
           ls -la /home/runner/work/opendut/opendut/
           rsync -v --recursive --checksum --update /home/runner/work/opendut/opendut/homepage/ /home/runner/work/opendut/opendut
-#          cp --recursive --update /home/runner/work/opendut/opendut/homepage/. /home/runner/work/opendut/opendut/
           rm -rf homepage/
           ls -la /home/runner/work/opendut/opendut/
           git add -A
