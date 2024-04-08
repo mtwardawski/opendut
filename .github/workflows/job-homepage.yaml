@@ -69,7 +69,7 @@ jobs:
           git config user.email github-actions@github.com
           git config user.name github-actions
           git config alias.switchorcreateorphan '!f() { (git switch $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && echo "ORPHANED"); }; f'
-          git switchorcreateorphan github-pages 
+          git switchorcreateorphan github-pages
           ls -la /home/runner/work/opendut/opendut/
           cp --recursive --update /home/runner/work/opendut/opendut/homepage/. /home/runner/work/opendut/opendut/
           rm -rf homepage/
@@ -79,4 +79,4 @@ jobs:
           ls -la /home/runner/work/opendut/opendut/
           git config alias.commitordonothing '!f() { git commit "Push homepage" 2>/dev/null || echo "No files to commit."; }; f'
           git commitordonothing
-          git push --force-with-lease -u origin github-pages
+          git push -u origin github-pages
