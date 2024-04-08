@@ -28,6 +28,14 @@ jobs:
     with:
       runs-on: "${{ vars.OPENDUT_GH_RUNNER_LARGE || '[\"ubuntu-latest\"]' }}"
 
+  homepage:
+    uses: ./.github/workflows/job-homepage.yaml
+    permissions:
+      contents: write
+      pages: write
+    with:
+      runs-on: "${{ vars.OPENDUT_GH_RUNNER_LARGE || '[\"ubuntu-latest\"]' }}"
+
   build-carl:
     uses: ./.github/workflows/job-build-carl.yaml
     needs: [ test ]

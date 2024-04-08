@@ -1,0 +1,78 @@
+name: homepage
+on:
+  workflow_call:  # allow this workflow to be called from other workflows
+    inputs:
+      runs-on:
+        default: "['ubuntu-latest']"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  check_documentation_changed:
+    name: Check if documentation has changed and a new deploy is needed
+    runs-on: ${{ fromJson(inputs.runs-on) }}
+    outputs:
+      documentation: ${{ steps.filter.outputs.documentation }}
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # https://github.com/dorny/paths-filter/tree/v3.0.2
+        id: filter
+        with:
+          filters: |
+            documentation:
+              - 'doc/**'
+              - 'opendut-homepage/**'
+
+  build_homepage:
+    name: Build the homepage and upload artifact
+    runs-on: ${{ fromJson(inputs.runs-on) }}
+    needs: check_documentation_changed
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - name: Rust setup
+        uses: ./.github/actions/rust-setup
+        with:
+          cargo-deny: true
+      - name: Build homepage
+        run: cargo ci doc homepage build
+      - name: Upload homepage artifact
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
+        with:
+          name: "homepage"
+          path: "./target/ci/homepage"
+          if-no-files-found: error
+          retention-days: 1
+
+  homepage_build_deploy: # Triggered if pushed on Main, Development or when tagged, also triggered if something changed in doc folder or in opendut-homapge folder
+    name: Release homepage (Changes in doc/opendut-homepage folder and Push on Main or Development or tagged)
+    needs: [check_documentation_changed, build_homepage]
+    runs-on: ${{ fromJson(inputs.runs-on) }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+
+      - name: Download Homepage Files
+        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
+        with:
+          pattern: "homepage"
+
+      - name: Prepare branch and commit
+        if: ${{ needs.check_documentation_changed.outputs.documentation == 'true' && (github.ref_name == 'main' || github.ref_name == 'development' || github.ref_type == 'tag') }}
+        run: |
+          cd /home/runner/work/opendut/opendut
+          git fetch --all
+          git config user.email github-actions@github.com
+          git config user.name github-actions
+          git config alias.switchorcreateorphan '!f() { (git checkout $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && echo "ORPHANED"); }; f'
+          git switchorcreateorphan github-pages
+          rsync -v --recursive --checksum --whole-file /home/runner/work/opendut/opendut/homepage/ /home/runner/work/opendut/opendut
+          rm -rf homepage/
+          git add -A
+          git status
+          git commit -m "Push homepage"
+          git push -u origin github-pages
