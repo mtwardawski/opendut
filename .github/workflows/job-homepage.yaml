@@ -77,7 +77,6 @@ jobs:
           git add -A
           git status
           ls -la /home/runner/work/opendut/opendut/
-          git commit "Push homepage"
-          git config alias.commitordonothing '!f() { git commit "Push homepage" 2>/dev/null || echo "No files to commit."; }; f'
+          git config alias.commitordonothing '!f() { git commit -m "Push homepage" 2>/dev/null || echo "No files to commit."; }; f'
           git commitordonothing
           git push -u origin github-pages
