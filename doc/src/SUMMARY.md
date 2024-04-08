@@ -1,6 +1,6 @@
 # Summary
 
-[Introduction TEST TEST](README.md)
+[Introduction](README.md)
 
 - [User Manual](user-manual/index.md)
   - [CLEO](user-manual/cleo/index.md)
