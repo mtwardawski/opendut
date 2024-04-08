@@ -70,13 +70,9 @@ jobs:
           git config user.name github-actions
           git config alias.switchorcreateorphan '!f() { (git checkout $1 2>/dev/null && echo "SWITCHED") || (git switch --orphan $1 && echo "ORPHANED"); }; f'
           git switchorcreateorphan github-pages
-          ls -la /home/runner/work/opendut/opendut/
           rsync -v --recursive --checksum --whole-file /home/runner/work/opendut/opendut/homepage/ /home/runner/work/opendut/opendut
           rm -rf homepage/
-          ls -la /home/runner/work/opendut/opendut/
           git add -A
           git status
-          ls -la /home/runner/work/opendut/opendut/
-          git config alias.commitordonothing '!f() { git commit -m "Push homepage" 2>/dev/null || echo "No files to commit."; }; f'
-          git commitordonothing
+          git commit -m "Push homepage"
           git push -u origin github-pages
