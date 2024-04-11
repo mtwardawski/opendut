@@ -22,7 +22,7 @@ jobs:
             documentation:
               - 'doc/**'
               - 'opendut-homepage/**'
-          base: development
+          base: testbranch-issue-118-provide-documentation-as-github-page
 
   build_homepage:
     name: Build the homepage and upload artifact
@@ -63,7 +63,7 @@ jobs:
     needs: build_homepage
     environment:
       name: github-pages
-      url: https://mtwardawski.github.io/opendut-test
+      url: ${{steps.deployment.outputs.page_url}}
     steps:
       - name: Deploy artifact
         id: deployment
