@@ -22,10 +22,10 @@ on:
 # OPENDUT_GH_RUNNER_LARGE: runner labels for large jobs
 
 jobs:
-#  legal:
-#    uses: ./.github/workflows/job-legal.yaml
-#    with:
-#      runs-on: "${{ vars.OPENDUT_GH_RUNNER_SMALL || '[\"ubuntu-latest\"]' }}"
+  legal:
+    uses: ./.github/workflows/job-legal.yaml
+    with:
+      runs-on: "${{ vars.OPENDUT_GH_RUNNER_SMALL || '[\"ubuntu-latest\"]' }}"
 #
 #  generate-sbom:
 #    uses: ./.github/workflows/job-sbom.yaml
@@ -37,14 +37,14 @@ jobs:
 #    with:
 #      runs-on: "${{ vars.OPENDUT_GH_RUNNER_LARGE || '[\"ubuntu-latest\"]' }}"
 
-  homepage:
-    uses: ./.github/workflows/job-homepage.yaml
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-    with:
-      runs-on: "${{ vars.OPENDUT_GH_RUNNER_LARGE || '[\"ubuntu-latest\"]' }}"
+#  homepage:
+#    uses: ./.github/workflows/job-homepage.yaml
+#    permissions:
+#      contents: write
+#      pages: write
+#      id-token: write
+#    with:
+#      runs-on: "${{ vars.OPENDUT_GH_RUNNER_LARGE || '[\"ubuntu-latest\"]' }}"
 #
 #  build-carl:
 #    uses: ./.github/workflows/job-build-carl.yaml
