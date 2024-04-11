@@ -22,6 +22,7 @@ jobs:
             documentation:
               - 'doc/**'
               - 'opendut-homepage/**'
+          base: development
 
   build_homepage:
     name: Build the homepage and upload artifact
@@ -36,8 +37,6 @@ jobs:
 
       - name: Rust setup
         uses: ./.github/actions/rust-setup
-        with:
-          cargo-deny: true
 
       - name: Build homepage
         run: cargo ci doc homepage build
@@ -63,8 +62,8 @@ jobs:
     runs-on: ${{ fromJson(inputs.runs-on) }}
     needs: build_homepage
     environment:
-      name: testbranch-issue-118-provide-documentation-as-github-page
-      url: ${{steps.deployment.outputs.page_url}}
+      name: github-pages
+      url: https://mtwardawski.github.io/
     steps:
       - name: Deploy artifact
         id: deployment
