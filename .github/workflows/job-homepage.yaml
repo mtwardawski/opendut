@@ -63,7 +63,7 @@ jobs:
     needs: build_homepage
     environment:
       name: github-pages
-      url: https://mtwardawski.github.io/
+      url: https://mtwardawski.github.io/opendut-test
     steps:
       - name: Deploy artifact
         id: deployment
