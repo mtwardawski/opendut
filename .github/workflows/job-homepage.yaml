@@ -7,10 +7,6 @@ on:
         required: false
         type: string
 
-permissions:
-  contents: write
-  pages: write
-
 jobs:
   check_documentation_changed:
     name: Check if documentation has changed and a new deploy is needed
