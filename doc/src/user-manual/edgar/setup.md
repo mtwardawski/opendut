@@ -26,6 +26,7 @@ Available architectures are:
 Once downloaded, extract the files with the command `tar xvf opendut-edgar-{architecture}.tar.gz`. It will then be extracted into
 the folder which is the current work directory. You might want to use another directory of your choice.
 
+
 ## CAN Setup
 - Only if you want to use CAN, it is mandatory to set the environment variable `OPENDUT_EDGAR_SERVICE_USER`.
   ```shell
