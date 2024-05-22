@@ -220,6 +220,9 @@ pub async fn create(settings: LoadedConfig) -> Result<()> { //TODO
                 &app_state.carl_installation_directory.path,
                 CleoScript::from_setting(&settings).expect("Could not read settings.")
             ).expect("Could not create cleo install script.");
+
+            provisioning::edgar::create_edgar(&app_state.carl_installation_directory.path)
+                .expect("Could not create edgar tarball.");
         }
 
         let http = axum::Router::new()
@@ -231,6 +234,7 @@ pub async fn create(settings: LoadedConfig) -> Result<()> { //TODO
                             .fallback(ServeFile::new(licenses_dir.join("index.json")))
                     )
                     .route("/api/cleo/:architecture/download", get(router::cleo::download_cleo))
+                    .route("/api/edgar/:architecture/download", get(router::edgar::download_edgar))
                     .route("/api/lea/config", get(router::lea_config))
                     .nest_service(
                         "/",
