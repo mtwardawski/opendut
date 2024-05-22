@@ -190,6 +190,38 @@ pub mod distribution {
         }
     }
 
+    mod edgar {
+        use clap::ValueEnum;
+        use super::*;
+
+        #[tracing::instrument]
+        pub fn get_edgar(out_dir: &PathBuf) -> crate::Result {
+
+            let architectures = Arch::value_variants().iter()
+                .filter(|&&arch| arch != Arch::Wasm).collect::<Vec<_>>();
+
+            let edgar_out_dir = out_dir.join(Package::Edgar.ident());
+            fs::create_dir_all(edgar_out_dir)?;
+
+            for arch in architectures {
+                crate::packages::edgar::build::build_release(arch.to_owned())?;
+                let edgar_build_dir = crate::packages::edgar::build::out_dir(arch.to_owned());
+
+                let edgar_arch_dir = out_dir.join(Package::Edgar.ident()).join(format!("{}-{}", Package::Edgar.ident(), arch.triple()));
+                fs::create_dir_all(&edgar_arch_dir)?;
+
+                fs_extra::file::copy(
+                    edgar_build_dir,
+                    &edgar_arch_dir.join(Package::Edgar.ident()),
+                    &fs_extra::file::CopyOptions::default()
+                        .overwrite(true)
+                )?;
+            }
+
+            Ok(())
+        }
+    }
+
     mod lea {
         use super::*;
 

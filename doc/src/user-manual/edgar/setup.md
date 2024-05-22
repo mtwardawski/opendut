@@ -13,6 +13,18 @@ You can get the `<SETUP-STRING>` from LEA or CLEO after creating a Peer.
 
 This will configure your operating system and start the *EDGAR Service*, which will receive its configuration from *CARL*.
 
+## Download EDGAR from CARL
+You can download the EDGAR binary as tarball from one of CARLs endpoints.
+
+The archive can be requested at `https://{CARL-HOST}/api/edgar/{architecture}/download`.
+
+Available architectures are:
+- x86_64-unknown-linux-gnu
+- armv7-unknown-linux-gnueabihf
+- aarch64-unknown-linux-gnu
+
+Once downloaded, extract the files with the command `tar xvf opendut-edgar-{architecture}.tar.gz`. It will then be extracted into
+the folder which is the current work directory. You might want to use another directory of your choice.
 
 ## CAN Setup
 - Only if you want to use CAN, it is mandatory to set the environment variable `OPENDUT_EDGAR_SERVICE_USER`.
@@ -51,8 +63,8 @@ This will configure your operating system and start the *EDGAR Service*, which w
 
 
 ### Cannelloni
-- Download Cannelloni from the openDuT GitHub project: https://github.com/eclipse-opendut/cannelloni/releases/ and 
-install the packages:
+- Download Cannelloni from the openDuT GitHub project: https://github.com/eclipse-opendut/cannelloni/releases/ and
+  install the packages:
   ```shell
   sudo apt install -y python3-can can-utils libsctp1
   ```
@@ -96,7 +108,7 @@ install the packages:
   docker ps
   ```
 
-- Netbird logs are available on host machine 
+- Netbird logs are available on host machine
   ```shell
   cat /var/lib/netbird/client.log
   cat /var/lib/netbird/netbird.err
@@ -104,16 +116,16 @@ install the packages:
   ```
 
 - EDGAR might start with an old IP, different from command `sudo wg` would print. In that particular case
-stop netbird service and opendut-edgar service and re-run the setup. This might happen to all
-EDGARs. If this is not enough, and it keeps getting the old IP, it is necessary to set up all
-devices and clusters from scratch.
+  stop netbird service and opendut-edgar service and re-run the setup. This might happen to all
+  EDGARs. If this is not enough, and it keeps getting the old IP, it is necessary to set up all
+  devices and clusters from scratch.
   ```shell
   sudo wg
   ```
 
 - If this ERROR appears: ERROR opendut_edgar::service::cannelloni_manager: Failed to start cannelloni instance for remote IP 100.80.171.237: 'No such file or directory (os error 2)'.
-(OPTIONAL) Copy cannelloni to custom location. This is the way to go, if the step before is
-    not possible to be done. This can happen for whatever reason, i.e. missing root rights.
+  (OPTIONAL) Copy cannelloni to custom location. This is the way to go, if the step before is
+  not possible to be done. This can happen for whatever reason, i.e. missing root rights.
   ```shell
   export LD_LIBRARY_PATH=/your-path-to-cannelloni/cannelloni (just folder, not the binary)
   export PATH={all_other_PATH_variables}:/your-path-to-cannelloni/cannelloni
