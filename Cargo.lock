@@ -2600,6 +2600,7 @@ dependencies = [
  "futures",
  "googletest",
  "http 0.2.12",
+ "indoc",
  "itertools 0.12.1",
  "oauth2",
  "opendut-carl-api",
@@ -2680,6 +2681,7 @@ dependencies = [
  "shadow-rs",
  "strum",
  "tar",
+ "tempfile",
  "tracing",
  "tracing-subscriber",
 ]

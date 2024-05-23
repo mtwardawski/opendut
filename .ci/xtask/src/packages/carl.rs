@@ -103,7 +103,7 @@ pub mod distribution {
         distribution::collect_executables(SELF_PACKAGE, target)?;
 
         cleo::get_cleo(&distribution_out_dir)?;
-        edgar::get_edgar(&distribution_out_dir)?;
+        // edgar::get_edgar(&distribution_out_dir)?;
         lea::get_lea(&distribution_out_dir)?;
         copy_license_json::copy_license_json(target, SkipGenerate::No)?;
 
@@ -115,7 +115,10 @@ pub mod distribution {
     }
 
     mod cleo {
+        use std::fs::File;
         use clap::ValueEnum;
+        use flate2::read::GzDecoder;
+        use tempfile::TempDir;
         use super::*;
 
         #[tracing::instrument]
@@ -128,14 +131,20 @@ pub mod distribution {
             fs::create_dir_all(cleo_out_dir)?;
             
             for arch in architectures {
-                crate::packages::cleo::build::build_release(arch.to_owned())?;
-                let cleo_build_dir = crate::packages::cleo::build::out_dir(arch.to_owned());
+                crate::packages::cleo::distribution::cleo_distribution(arch.to_owned())?;
+                let cleo_build_dir = crate::tasks::distribution::out_arch_dir(arch.to_owned());
 
                 let cleo_arch_dir = out_dir.join(Package::Cleo.ident()).join(format!("{}-{}", Package::Cleo.ident(), arch.triple()));
                 fs::create_dir_all(&cleo_arch_dir)?;
-                
+
+                // unzip into tmp
+                let mut tmp_file: TempDir = tempfile::tempdir().unwrap();
+                let mut archive = tar::Archive::new(GzDecoder::new(File::open(cleo_build_dir.join(format!("{}-{}-0.1.0.tar.gz", Package::Cleo.ident(), arch.triple())))?));
+                archive.set_preserve_permissions(true);
+                archive.unpack(&tmp_file)?;
+
                 fs_extra::file::copy(
-                    cleo_build_dir,
+                    cleo_build_dir.join(format!("{}-{}-0.1.0.tar.gz", Package::Cleo.ident(), arch.triple())),
                     &cleo_arch_dir.join(Package::Cleo.ident()),
                     &fs_extra::file::CopyOptions::default()
                         .overwrite(true)
@@ -148,6 +157,7 @@ pub mod distribution {
 
     mod edgar {
         use clap::ValueEnum;
+        use crate::packages::edgar::distribution::netbird;
         use super::*;
 
         #[tracing::instrument]
@@ -160,11 +170,20 @@ pub mod distribution {
             fs::create_dir_all(edgar_out_dir)?;
 
             for arch in architectures {
+                /**
+                build edgar
+                distribute netbird
+                copy and rename netbird
+                zip netbird with edgar under 'install' folder
+                */
                 crate::packages::edgar::build::build_release(arch.to_owned())?;
+                netbird::netbird_client_distribution(arch.to_owned())?;
                 let edgar_build_dir = crate::packages::edgar::build::out_dir(arch.to_owned());
 
                 let edgar_arch_dir = out_dir.join(Package::Edgar.ident()).join(format!("{}-{}", Package::Edgar.ident(), arch.triple()));
                 fs::create_dir_all(&edgar_arch_dir)?;
+
+                println!("EDGAR DIR {}", &edgar_arch_dir.display());
 
                 fs_extra::file::copy(
                     edgar_build_dir,
@@ -284,18 +303,21 @@ pub mod distribution {
 
             let opendut_carl_executable = carl_dir.child(SELF_PACKAGE.ident());
             let opendut_cleo_dir = carl_dir.child(Package::Cleo.ident());
+            let opendut_edgar_dir = carl_dir.child(Package::Edgar.ident());
             let opendut_lea_dir = carl_dir.child(Package::Lea.ident());
             let licenses_dir = carl_dir.child("licenses");
 
             carl_dir.dir_contains_exactly_in_order(vec![
                 &licenses_dir,
                 &opendut_carl_executable,
+                &opendut_edgar_dir,
                 &opendut_cleo_dir,
                 &opendut_lea_dir,
             ]);
 
             opendut_carl_executable.assert_non_empty_file();
             opendut_cleo_dir.assert(path::is_dir());
+            opendut_edgar_dir.assert(path::is_dir());
             opendut_lea_dir.assert(path::is_dir());
             licenses_dir.assert(path::is_dir());
 
