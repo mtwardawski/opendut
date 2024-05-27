@@ -22,7 +22,7 @@ pub async fn download_cleo(
         content_type = "application/octet-stream";
         carl_install_directory.path.join("opendut-cleo")
     } else {
-        file_name = format!("{}.tar.gz", &file_name);
+        file_name = format!("{}-{}.tar.gz", &file_name, crate::app_info::CRATE_VERSION);
         carl_install_directory.path.join(CLEO_IDENTIFIER).join(&file_name)
     };
 

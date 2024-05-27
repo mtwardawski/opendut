@@ -14,6 +14,7 @@ opendut-util = { workspace = true }
 opendut-vpn = { workspace = true }
 
 anyhow = { workspace = true }
+assert_fs = { workspace = true }
 axum = { workspace = true }
 axum-server = { workspace = true, features = ["tls-rustls"] }
 axum-server-dual-protocol = { workspace = true }
@@ -47,6 +48,7 @@ uuid = { workspace = true }
 [dev-dependencies]
 assert_fs = { workspace = true }
 async-trait = { workspace = true }
+predicates = { workspace = true }
 rstest = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }
 

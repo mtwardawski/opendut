@@ -193,12 +193,14 @@ pub async fn create(settings: LoadedConfig) -> Result<()> { //TODO
             None
         };
 
+        let carl_installation_directory = CarlInstallDirectory::determine().expect("Could not determine installation directory.");
+
         let app_state = HttpState {
             lea_config: LeaConfig {
                 carl_url,
                 idp_config: lea_idp_config,
             },
-            carl_installation_directory: CarlInstallDirectory::determine().expect("Could not determine installation directory.")
+            carl_installation_directory
         };
 
         let lea_index_html = lea_dir.join("index.html").clone();
@@ -221,8 +223,8 @@ pub async fn create(settings: LoadedConfig) -> Result<()> { //TODO
                 CleoScript::from_setting(&settings).expect("Could not read settings.")
             ).expect("Could not create cleo install script.");
 
-            provisioning::edgar::create_edgar(&app_state.carl_installation_directory.path)
-                .expect("Could not create edgar tarball.");
+            // provisioning::edgar::create_edgar(&app_state.carl_installation_directory.path)
+            //     .expect("Could not create edgar tarball.");
         }
 
         let http = axum::Router::new()
