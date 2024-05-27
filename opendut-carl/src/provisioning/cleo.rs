@@ -53,13 +53,23 @@ fn add_file_to_archive(
     let enc = GzEncoder::new(tar_gz, Compression::default());
     let mut tar = tar::Builder::new(enc);
 
-    tar.append_dir_all("", unpack_dir.join(CLEO_IDENTIFIER))?;
-    tar.append_custom_data(&cleo_script.build_script(), SET_ENVIRONMENT_VARIABLES_SCRIPT_NAME, PERMISSION_CODE_SCRIPT)?;
-    tar.append_custom_data(&ca.to_string(), CA_CERTIFICATE_FILE_NAME, PERMISSION_CODE_CA)?;
+    tar.append_dir_all("", unpack_dir)?;
+    tar.append_custom_data(
+        &cleo_script.build_script(),
+        SET_ENVIRONMENT_VARIABLES_SCRIPT_NAME.append_prefix_file_name(CLEO_IDENTIFIER).as_str(),
+        PERMISSION_CODE_SCRIPT
+    )?;
+    tar.append_custom_data(
+        &ca.to_string(),
+        CA_CERTIFICATE_FILE_NAME.append_prefix_file_name(CLEO_IDENTIFIER).as_str(),
+        PERMISSION_CODE_CA
+    )?;
     tar.into_inner()?.finish()?;
 
     Ok(())
 }
+
+
 
 pub trait AppendCustomData {
     fn append_custom_data(&mut self, data: &str, file_name: &str, mode: u32) -> std::io::Result<()>;
@@ -71,6 +81,15 @@ impl AppendCustomData for tar::Builder<GzEncoder<File>> {
         header.set_mode(mode);
         header.set_cksum();
         self.append_data(&mut header, file_name, data.as_bytes())
+    }
+}
+
+pub trait AppendCustomString {
+    fn append_prefix_file_name(&self, prefix: &str) -> String;
+}
+impl AppendCustomString for &str {
+    fn append_prefix_file_name(&self, prefix: &str) -> String {
+        format!("{}/{}", prefix, &self)
     }
 }
 

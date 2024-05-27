@@ -103,7 +103,7 @@ pub mod distribution {
         distribution::collect_executables(SELF_PACKAGE, target)?;
 
         cleo::get_cleo(&distribution_out_dir)?;
-        // edgar::get_edgar(&distribution_out_dir)?;
+        edgar::get_edgar(&distribution_out_dir)?;
         lea::get_lea(&distribution_out_dir)?;
         copy_license_json::copy_license_json(target, SkipGenerate::No)?;
 
@@ -153,8 +153,9 @@ pub mod distribution {
     }
 
     mod edgar {
+        use anyhow::Context;
         use clap::ValueEnum;
-        use crate::packages::edgar::distribution::netbird;
+        use crate::tasks::distribution::bundle;
         use super::*;
 
         #[tracing::instrument]
@@ -167,16 +168,19 @@ pub mod distribution {
             fs::create_dir_all(edgar_out_dir)?;
 
             for arch in architectures {
-                crate::packages::edgar::build::build_release(arch.to_owned())?;
-                netbird::netbird_client_distribution(arch.to_owned())?;
-                let edgar_build_dir = crate::packages::edgar::build::out_dir(arch.to_owned());
+                crate::packages::edgar::distribution::edgar_distribution(arch.to_owned())?;
+                let edgar_build_dir = crate::tasks::distribution::out_arch_dir(arch.to_owned());
 
-                let edgar_arch_dir = out_dir.join(Package::Edgar.ident()).join(format!("{}-{}", Package::Edgar.ident(), arch.triple()));
+                let edgar_arch_dir = out_dir.join(Package::Edgar.ident());
                 fs::create_dir_all(&edgar_arch_dir)?;
 
+                let tar_file_name = bundle::out_file(Package::Edgar, *arch);
+
+                let edgar_tar_file_name = tar_file_name.file_name().context(format!("Could not extract file name {}", &tar_file_name.display()))?;
+
                 fs_extra::file::copy(
-                    edgar_build_dir,
-                    &edgar_arch_dir.join(Package::Edgar.ident()),
+                    edgar_build_dir.join(&tar_file_name),
+                    &edgar_arch_dir.join(edgar_tar_file_name),
                     &fs_extra::file::CopyOptions::default()
                         .overwrite(true)
                 )?;
@@ -239,20 +243,20 @@ pub mod distribution {
             let cleo_out_file = out_dir.join(crate::tasks::licenses::json::out_file_name(Package::Cleo));
             let lea_in_file = crate::tasks::licenses::json::out_file(Package::Lea);
             let lea_out_file = out_dir.join(crate::tasks::licenses::json::out_file_name(Package::Lea));
-            // let edgar_in_file = crate::tasks::licenses::json::out_file(Package::Edgar);
-            // let edgar_out_file = out_dir.join(crate::tasks::licenses::json::out_file_name(Package::Edgar));
+            let edgar_in_file = crate::tasks::licenses::json::out_file(Package::Edgar);
+            let edgar_out_file = out_dir.join(crate::tasks::licenses::json::out_file_name(Package::Edgar));
 
             fs::create_dir_all(out_dir)?;
             fs::copy(carl_in_file, &carl_out_file)?;
             fs::copy(cleo_in_file, &cleo_out_file)?;
             fs::copy(lea_in_file, &lea_out_file)?;
-            // fs::copy(edgar_in_file, &edgar_out_file)?;
+            fs::copy(edgar_in_file, &edgar_out_file)?;
 
             fs::write(
                 out_dir.join("index.json"),
                 json!({
                     "carl": carl_out_file.file_name().unwrap().to_str(),
-                    // "edgar": edgar_out_file.file_name().unwrap().to_str(),
+                    "edgar": edgar_out_file.file_name().unwrap().to_str(),
                     "cleo": cleo_out_file.file_name().unwrap().to_str(),
                     "lea": lea_out_file.file_name().unwrap().to_str(),
                 }).to_string(),
@@ -292,28 +296,28 @@ pub mod distribution {
 
             let opendut_carl_executable = carl_dir.child(SELF_PACKAGE.ident());
             let opendut_cleo_dir = carl_dir.child(Package::Cleo.ident());
-            // let opendut_edgar_dir = carl_dir.child(Package::Edgar.ident());
+            let opendut_edgar_dir = carl_dir.child(Package::Edgar.ident());
             let opendut_lea_dir = carl_dir.child(Package::Lea.ident());
             let licenses_dir = carl_dir.child("licenses");
 
             carl_dir.dir_contains_exactly_in_order(vec![
                 &licenses_dir,
                 &opendut_carl_executable,
-                // &opendut_edgar_dir,
                 &opendut_cleo_dir,
+                &opendut_edgar_dir,
                 &opendut_lea_dir,
             ]);
 
             opendut_carl_executable.assert_non_empty_file();
             opendut_cleo_dir.assert(path::is_dir());
-            // opendut_edgar_dir.assert(path::is_dir());
+            opendut_edgar_dir.assert(path::is_dir());
             opendut_lea_dir.assert(path::is_dir());
             licenses_dir.assert(path::is_dir());
 
             { //validate license dir contents
                 let licenses_index_file = licenses_dir.child("index.json");
                 let licenses_carl_file = licenses_dir.child("opendut-carl.licenses.json");
-                // let licenses_edgar_file = licenses_dir.child("opendut-edgar.licenses.json");
+                let licenses_edgar_file = licenses_dir.child("opendut-edgar.licenses.json");
                 let licenses_cleo_file = licenses_dir.child("opendut-cleo.licenses.json");
                 let licenses_lea_file = licenses_dir.child("opendut-lea.licenses.json");
 
@@ -321,7 +325,7 @@ pub mod distribution {
                     &licenses_index_file,
                     &licenses_carl_file,
                     &licenses_cleo_file,
-                    // &licenses_edgar_file,
+                    &licenses_edgar_file,
                     &licenses_lea_file,
                 ]);
 

@@ -222,9 +222,6 @@ pub async fn create(settings: LoadedConfig) -> Result<()> { //TODO
                 &app_state.carl_installation_directory.path,
                 CleoScript::from_setting(&settings).expect("Could not read settings.")
             ).expect("Could not create cleo install script.");
-
-            // provisioning::edgar::create_edgar(&app_state.carl_installation_directory.path)
-            //     .expect("Could not create edgar tarball.");
         }
 
         let http = axum::Router::new()
