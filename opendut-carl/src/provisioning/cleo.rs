@@ -163,7 +163,7 @@ mod test {
             unpack_dir
         };
 
-        let existing_test_file = unpack_dir.child("test.txt");
+        let existing_test_file = unpack_dir.child("opendut-cleo/test.txt");
         existing_test_file.assert(path::is_file());
 
         Ok(())
