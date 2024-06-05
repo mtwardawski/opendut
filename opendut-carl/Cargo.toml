@@ -20,6 +20,7 @@ axum = { workspace = true }
 axum-server = { workspace = true, features = ["tls-rustls"] }
 axum-server-dual-protocol = { workspace = true }
 config = { workspace = true }
+diesel = { workspace = true, features = ["postgres", "pq-src", "uuid"] }
 flate2 = { workspace = true }
 futures = { workspace = true }
 googletest = { workspace = true }
