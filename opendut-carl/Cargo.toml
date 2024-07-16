@@ -21,6 +21,10 @@ axum-server = { workspace = true, features = ["tls-rustls"] }
 axum-server-dual-protocol = { workspace = true }
 config = { workspace = true }
 diesel = { workspace = true, features = ["postgres", "pq-src", "uuid"] }
+pq-src = { version = "0.3.0", features = ["default"] }
+pq-sys = { version = "0.6.1", features = ["bundled"] }
+openssl-sys = { version = "0.9.102", features = ["vendored"]}
+
 flate2 = { workspace = true }
 futures = { workspace = true }
 googletest = { workspace = true }
